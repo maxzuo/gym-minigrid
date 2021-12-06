@@ -10,14 +10,21 @@ from .rendering import *
 # Size in pixels of a tile in the full-scale human view
 TILE_PIXELS = 32
 
+# Used to encode MultiDoor colors
+primes = (2,3,5,7,11,13,17,19,23,29,31,37,41,43,47,53,59,61,67,71,73,79,83,89,97)
+
 # Map of color names to RGB values
 COLORS = {
     'red'   : np.array([255, 0, 0]),
+    'pink'  : np.array([255, 153, 255]),
     'green' : np.array([0, 255, 0]),
+    'marine': np.array([96, 205, 171]),
     'blue'  : np.array([0, 0, 255]),
     'purple': np.array([112, 39, 195]),
     'yellow': np.array([255, 255, 0]),
-    'grey'  : np.array([100, 100, 100])
+    'orange': np.array([255, 153, 0]),
+    'grey'  : np.array([100, 100, 100]),
+    'white' : np.array([225, 225, 225])
 }
 
 COLOR_NAMES = sorted(list(COLORS.keys()))
@@ -25,12 +32,18 @@ COLOR_NAMES = sorted(list(COLORS.keys()))
 # Used to map colors to integers
 COLOR_TO_IDX = {
     'red'   : 0,
-    'green' : 1,
-    'blue'  : 2,
-    'purple': 3,
-    'yellow': 4,
-    'grey'  : 5
+    'pink'  : 1,
+    'green' : 2,
+    'marine': 3,
+    'blue'  : 4,
+    'purple': 5,
+    'yellow': 6,
+    'orange': 7,
+    'grey'  : 8,
+    'white' : 9,
 }
+
+COLOR_NAMES = sorted(list(COLORS.keys()))
 
 IDX_TO_COLOR = dict(zip(COLOR_TO_IDX.values(), COLOR_TO_IDX.keys()))
 
@@ -47,6 +60,7 @@ OBJECT_TO_IDX = {
     'goal'          : 8,
     'lava'          : 9,
     'agent'         : 10,
+    'multidoor'     : 11,
 }
 
 IDX_TO_OBJECT = dict(zip(OBJECT_TO_IDX.values(), OBJECT_TO_IDX.keys()))
@@ -138,6 +152,19 @@ class WorldObj:
             v = Box(color)
         elif obj_type == 'door':
             v = Door(color, is_open, is_locked)
+        elif obj_type == 'multidoor':
+            colors = []
+            locks = []
+            for i,prime in enumerate(primes):
+                if color_idx == 1:
+                    break
+                if color_idx % prime == 0:
+                    color_idx //= prime
+                    colors.append(IDX_TO_COLOR[i // 2])
+                    locks.append(i % 2 == 1)
+
+            v = MultiDoor(colors, is_open, is_locked)
+            v.locks = locks
         elif obj_type == 'goal':
             v = Goal()
         elif obj_type == 'lava':
@@ -271,6 +298,44 @@ class Door(WorldObj):
 
             # Draw door handle
             fill_coords(img, point_in_circle(cx=0.75, cy=0.50, r=0.08), c)
+
+class MultiDoor(Door):
+    def __init__(self, colors, is_open:bool=False, is_locked:bool=False):
+        super().__init__(colors[0], is_open=is_open, is_locked=is_locked)
+
+        self.colors = tuple(colors)
+        self.locks = [not is_locked for c in colors]
+
+    def toggle(self, env, pos):
+        print(self.is_open, self.is_locked)
+        print(*zip(self.colors, self.locks))
+        if self.is_locked:
+            print(isinstance(env.carrying, Key), env.carrying.color in self.locks, env.carrying.color)
+            if isinstance(env.carrying, Key) and env.carrying.color in self.colors:
+                self.locks[self.colors.index(env.carrying.color)] = True
+                self.is_open = all(self.locks)
+            print(self.is_open, self.is_locked)
+            print(*zip(self.colors, self.locks))
+            return self.is_open
+
+        self.is_open = not self.is_open
+        return True
+
+    def encode(self):
+
+        if self.is_open:
+            state = 0
+        elif self.is_locked:
+            state = 2
+        elif not self.is_open:
+            state = 1
+
+        color_state = 1
+        for i,c in enumerate(self.colors):
+            primes[COLOR_TO_IDX[c]]
+            color_state *= primes[COLOR_TO_IDX[c] * 2 + self.locks[i]]
+
+        return (OBJECT_TO_IDX['multidoor'], color_state, state)
 
 class Key(WorldObj):
     def __init__(self, color='blue'):

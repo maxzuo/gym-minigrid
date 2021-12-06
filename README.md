@@ -1,6 +1,9 @@
 # Minimalistic Gridworld Environment (MiniGrid)
 
-[![Build Status](https://travis-ci.org/maximecb/gym-minigrid.svg?branch=master)](https://travis-ci.org/maximecb/gym-minigrid)
+#### What's different
+- Some new (more involved) environments, see below:
+- MultiLockDoor object: Require several keys to lock one door
+  - currently no way to identify which keys go to which door except through natural language
 
 There are other gridworld Gym environments out there, but this one is
 designed to be particularly simple, lightweight and fast. The code has very few
@@ -48,7 +51,7 @@ List of publications & submissions using MiniGrid or BabyAI (please open a pull 
 Natural Language in Reinforcement Learning](https://arxiv.org/pdf/1910.04040.pdf) (Oct 2019, University of Antwerp)
 - [Generalization in Reinforcement Learning with Selective Noise Injection and Information Bottleneck
 ](https://arxiv.org/abs/1910.12911) (MSR, NeurIPS, Oct 2019)
-- [Recurrent Independent Mechanisms](https://arxiv.org/pdf/1909.10893.pdf) (Mila, Sept 2019) 
+- [Recurrent Independent Mechanisms](https://arxiv.org/pdf/1909.10893.pdf) (Mila, Sept 2019)
 - [Learning Effective Subgoals with Multi-Task Hierarchical Reinforcement Learning](http://surl.tirl.info/proceedings/SURL-2019_paper_10.pdf) (Tsinghua University, August 2019)
 - [Mastering emergent language: learning to guide in simulated navigation](https://arxiv.org/abs/1908.05135) (University of Amsterdam, Aug 2019)
 - [Transfer Learning by Modeling a Distribution over Policies](https://arxiv.org/abs/1906.03574) (Mila, June 2019)
@@ -160,7 +163,7 @@ Actions in the basic environment:
 - Done (task completed, optional)
 
 Default tile/observation encoding:
-- Each tile is encoded as a 3 dimensional tuple: (OBJECT_IDX, COLOR_IDX, STATE) 
+- Each tile is encoded as a 3 dimensional tuple: (OBJECT_IDX, COLOR_IDX, STATE)
 - OBJECT_TO_IDX and COLOR_TO_IDX mapping can be found in [gym_minigrid/minigrid.py](gym_minigrid/minigrid.py)
 - e.g. door STATE -> 0: open, 1: closed, 2: locked
 
@@ -171,6 +174,20 @@ You can define your own reward function by creating a class derived
 from `MiniGridEnv`. Extending the environment with new object types or new actions
 should be very easy. If you wish to do this, you should take a look at the
 [gym_minigrid/minigrid.py](gym_minigrid/minigrid.py) source file.
+
+
+## New Environments
+Environments developed in this repo are here.
+
+### LockedHallway
+Very straightforward. Sequentially open doors until the last door is opened.
+- v0 has all keys in corresponding rooms.
+- v1 has all keys in the first room.
+- v2 has all keys in any random room before or in the corresponding room.
+
+<p align="center">
+<img src="/figures/LockedHallway-v0.png" width=200>
+</p>
 
 ## Included Environments
 

@@ -19,3 +19,7 @@ from gym_minigrid.envs.crossing import *
 from gym_minigrid.envs.lavagap import *
 from gym_minigrid.envs.dynamicobstacles import *
 from gym_minigrid.envs.distshift import *
+from gym_minigrid.envs.lockedhallway import *
+from gym_minigrid.envs.multilockdoor import *
+from gym_minigrid.envs.keydoor import *
+from gym_minigrid.envs.dualhallway import *
