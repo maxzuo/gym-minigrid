@@ -180,6 +180,21 @@ should be very easy. If you wish to do this, you should take a look at the
 Environments developed in this repo are here.
 
 ### LockedHallway
+
+Registered configurations:
+- `MiniGrid-LockedHallway-v0`
+- `MiniGrid-LockedHallway-6-v0`
+- `MiniGrid-LockedHallway-7-v0`
+- `MiniGrid-LockedHallway-8-v0`
+- `MiniGrid-LockedHallway-v1`
+- `MiniGrid-LockedHallway-6-v1`
+- `MiniGrid-LockedHallway-7-v1`
+- `MiniGrid-LockedHallway-8-v1`
+- `MiniGrid-LockedHallway-v2`
+- `MiniGrid-LockedHallway-6-v2`
+- `MiniGrid-LockedHallway-7-v2`
+- `MiniGrid-LockedHallway-8-v2`
+
 Very straightforward. Sequentially open doors until the last door is opened.
 - v0 has all keys in corresponding rooms.
 - v1 has all keys in the first room.
