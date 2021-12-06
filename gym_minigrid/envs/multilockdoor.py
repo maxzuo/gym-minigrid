@@ -54,5 +54,5 @@ class MultiLockDoorEnv(MiniGridEnv):
 
 register(
     id='MiniGrid-MultiLockDoor-v0',
-    entry_point=MultiLockDoorEnv
+    entry_point="gym_minigrid.envs:MultiLockDoorEnv"
 )

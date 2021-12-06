@@ -61,20 +61,20 @@ class CascadingLockDoor_5Env(CascadingLockDoorEnv):
 
 register(
     id='MiniGrid-CascadingLockDoor-v0',
-    entry_point=CascadingLockDoorEnv
+    entry_point="gym_minigrid.envs:CascadingLockDoorEnv"
 )
 
 register(
     id='MiniGrid-CascadingLockDoor-3-v0',
-    entry_point=CascadingLockDoor_3Env
+    entry_point="gym_minigrid.envs:CascadingLockDoor_3Env"
 )
 
 register(
     id='MiniGrid-CascadingLockDoor-4-v0',
-    entry_point=CascadingLockDoor_4Env
+    entry_point="gym_minigrid.envs:CascadingLockDoor_4Env"
 )
 
 register(
     id='MiniGrid-CascadingLockDoor-5-v0',
-    entry_point=CascadingLockDoor_5Env
+    entry_point="gym_minigrid.envs:CascadingLockDoor_5Env"
 )

@@ -23,3 +23,4 @@ from gym_minigrid.envs.lockedhallway import *
 from gym_minigrid.envs.multilockdoor import *
 from gym_minigrid.envs.keydoor import *
 from gym_minigrid.envs.dualhallway import *
+from gym_minigrid.envs.cascadinglockdoor import *

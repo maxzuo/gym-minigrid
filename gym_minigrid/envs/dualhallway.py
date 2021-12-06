@@ -54,5 +54,5 @@ class DualHallwayEnv(MiniGridEnv):
 
 register(
     id='MiniGrid-DualHallway-v0',
-    entry_point=DualHallwayEnv
+    entry_point="gym_minigrid.envs:DualHallwayEnv"
 )

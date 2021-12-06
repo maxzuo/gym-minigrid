@@ -166,59 +166,59 @@ class LockedHallway3Env_8rooms(LockedHallway3Env):
 
 register(
     id='MiniGrid-LockedHallway-v0',
-    entry_point=LockedHallwayEnv
+    entry_point="gym_minigrid.envs:LockedHallwayEnv"
 )
 
 register(
     id='MiniGrid-LockedHallway-6-v0',
-    entry_point=LockedHallwayEnv_6rooms
+    entry_point="gym_minigrid.envs:LockedHallwayEnv_6rooms"
 )
 register(
     id='MiniGrid-LockedHallway-7-v0',
-    entry_point=LockedHallwayEnv_7rooms
+    entry_point="gym_minigrid.envs:LockedHallwayEnv_7rooms"
 )
 register(
     id='MiniGrid-LockedHallway-8-v0',
-    entry_point=LockedHallwayEnv_8rooms
+    entry_point="gym_minigrid.envs:LockedHallwayEnv_8rooms"
 )
 
 register(
     id='MiniGrid-LockedHallway-v1',
-    entry_point=LockedHallway2Env
+    entry_point="gym_minigrid.envs:LockedHallway2Env"
 )
 
 register(
     id='MiniGrid-LockedHallway-6-v1',
-    entry_point=LockedHallway2Env_6rooms
+    entry_point="gym_minigrid.envs:LockedHallway2Env_6rooms"
 )
 
 register(
     id='MiniGrid-LockedHallway-7-v1',
-    entry_point=LockedHallway2Env_7rooms
+    entry_point="gym_minigrid.envs:LockedHallway2Env_7rooms"
 )
 
 register(
     id='MiniGrid-LockedHallway-8-v1',
-    entry_point=LockedHallway2Env_8rooms
+    entry_point="gym_minigrid.envs:LockedHallway2Env_8rooms"
 )
 
 
 register(
     id='MiniGrid-LockedHallway-v2',
-    entry_point=LockedHallway3Env
+    entry_point="gym_minigrid.envs:LockedHallway3Env"
 )
 
 register(
     id='MiniGrid-LockedHallway-6-v2',
-    entry_point=LockedHallway3Env_6rooms
+    entry_point="gym_minigrid.envs:LockedHallway3Env_6rooms"
 )
 
 register(
     id='MiniGrid-LockedHallway-7-v2',
-    entry_point=LockedHallway3Env_7rooms
+    entry_point="gym_minigrid.envs:LockedHallway3Env_7rooms"
 )
 
 register(
     id='MiniGrid-LockedHallway-8-v2',
-    entry_point=LockedHallway3Env_8rooms
+    entry_point="gym_minigrid.envs:LockedHallway3Env_8rooms"
 )
