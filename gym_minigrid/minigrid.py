@@ -131,7 +131,7 @@ class WorldObj:
         """Create an object from a 3-tuple state description"""
 
         obj_type = IDX_TO_OBJECT[type_idx]
-        color = IDX_TO_COLOR[color_idx]
+        color = IDX_TO_COLOR.get(color_idx, "white")
 
         if obj_type == 'empty' or obj_type == 'unseen':
             return None
