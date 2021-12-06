@@ -5,9 +5,12 @@ from gym_minigrid.register import register
 class CascadingLockDoorEnv(MiniGridEnv):
     def __init__(self, max_steps=10_000, height=6, num_rooms=2, see_through_walls=False):
 
+        assert 0 < num_rooms <= 4
+
         self.max_steps = max_steps
         self.room_height = height
         self.num_rooms = num_rooms
+        self.doors = [None for i in range(self.num_rooms)]
 
         super().__init__(width=height + 2, height=(self.room_height + 1) * self.num_rooms + 1, max_steps=max_steps, see_through_walls=see_through_walls)
 
@@ -19,18 +22,18 @@ class CascadingLockDoorEnv(MiniGridEnv):
         self.place_agent(top=(1,1), size=(width-2, width-2), rand_dir=True)
         self.target_pos = (self._rand_int(1, width - 1), height - 1)
 
-        wall = self.room_height + 1
-        colors = self._rand_subset(COLOR_NAMES, self.num_rooms)
+        colors = self._rand_elem(COLOR_SUBGROUP_BY_LEN[self.num_rooms])[::-1]
 
-        for i,color in enumerate(colors):
+        for i in range(len(colors)):
             y = (i + 1) * (self.room_height + 1)
             self.grid.horz_wall(0, y, width)
             self.target_pos = (self._rand_int(1, width - 1), y)
 
-            self.grid.set(*self.target_pos, MultiDoor(colors[:i+1][::-1], is_locked=True))
-            p = self.place_obj(Key(color), top=(1, (self.room_height + 1) * i + 1), size=(self.room_height, self.room_height))
+            self.doors[i] = MultiDoor(colors[:i+1][::-1], is_locked=True)
+            self.grid.set(*self.target_pos, self.doors[i])
+            self.place_obj(Key(colors[i]), top=(1, (self.room_height + 1) * i + 1), size=(self.room_height, self.room_height))
 
-            self.mission = f"Go to the {color} door"
+            self.mission = f"Go to the {colors[i]} door"
 
     def step(self, action):
         obs, reward, done, info = super().step(action)
@@ -71,9 +74,4 @@ register(
 register(
     id='MiniGrid-CascadingLockDoor-4-v0',
     entry_point="gym_minigrid.envs:CascadingLockDoor_4Env"
-)
-
-register(
-    id='MiniGrid-CascadingLockDoor-5-v0',
-    entry_point="gym_minigrid.envs:CascadingLockDoor_5Env"
 )

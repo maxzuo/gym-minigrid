@@ -1,5 +1,6 @@
 import math
 import hashlib
+from itertools import permutations
 import gym
 from enum import IntEnum
 import numpy as np
@@ -11,7 +12,7 @@ from .rendering import *
 TILE_PIXELS = 32
 
 # Used to encode MultiDoor colors
-primes = (2,3,5,7,11,13,17,19,23,29,31,37,41,43,47,53,59,61,67,71,73,79,83,89,97)
+# primes = (2,3,5,7,11,13,17,19,23,29,31,37,41,43,47,53,59,61,67,71,73,79,83,89,97)
 
 # Map of color names to RGB values
 COLORS = {
@@ -43,9 +44,29 @@ COLOR_TO_IDX = {
     'white' : 9,
 }
 
-COLOR_NAMES = sorted(list(COLORS.keys()))
-
 IDX_TO_COLOR = dict(zip(COLOR_TO_IDX.values(), COLOR_TO_IDX.keys()))
+
+
+# Used for MultiLockDoors, can only support 6 colors, max 4
+COLOR_SUBGROUPS = [(),
+    *((color,) for color in COLOR_NAMES[:6]),
+    *permutations(COLOR_NAMES[:6], 2),
+    *permutations(COLOR_NAMES[:6], 3),
+    *(list(permutations(COLOR_NAMES[:6], 4))[:99])
+]
+
+assert(len(COLOR_SUBGROUPS) == 256)
+
+COLOR_SUBGROUP_BY_LEN = {
+    0: (),
+    1: COLOR_SUBGROUPS[1:6],
+    2: COLOR_SUBGROUPS[7:36],
+    3: COLOR_SUBGROUPS[37:156],
+    4: COLOR_SUBGROUPS[157:]
+}
+
+COLOR_SUBGROUP_TO_IDX = {c:i for i,c in enumerate(COLOR_SUBGROUPS)}
+
 
 # Map of object type to integers
 OBJECT_TO_IDX = {
@@ -137,8 +158,8 @@ class WorldObj:
             return None
 
         # State, 0: open, 1: closed, 2: locked
-        is_open = state == 0
-        is_locked = state == 2
+        is_open = state % 4 == 0
+        is_locked = state % 4 == 2
 
         if obj_type == 'wall':
             v = Wall(color)
@@ -153,18 +174,17 @@ class WorldObj:
         elif obj_type == 'door':
             v = Door(color, is_open, is_locked)
         elif obj_type == 'multidoor':
-            colors = []
+            colors = COLOR_SUBGROUPS[color_idx]
             locks = []
-            for i,prime in enumerate(primes):
-                if color_idx == 1:
-                    break
-                if color_idx % prime == 0:
-                    color_idx //= prime
-                    colors.append(IDX_TO_COLOR[i // 2])
-                    locks.append(i % 2 == 1)
+
+            lock_state = state // 4
+
+            for _ in range(len(colors)):
+                locks.append(int(lock_state % 2))
+                lock_state //= 2
 
             v = MultiDoor(colors, is_open, is_locked)
-            v.locks = locks
+            v.locks = locks[::-1]
         elif obj_type == 'goal':
             v = Goal()
         elif obj_type == 'lava':
@@ -303,6 +323,8 @@ class MultiDoor(Door):
     def __init__(self, colors, is_open:bool=False, is_locked:bool=False):
         super().__init__(colors[0], is_open=is_open, is_locked=is_locked)
 
+        assert 0 < len(colors) <= 4
+
         self.colors = tuple(colors)
         self.locks = [not is_locked for c in colors]
 
@@ -325,12 +347,13 @@ class MultiDoor(Door):
         elif not self.is_open:
             state = 1
 
-        color_state = 1
-        for i,c in enumerate(self.colors):
-            primes[COLOR_TO_IDX[c]]
-            color_state *= primes[COLOR_TO_IDX[c] * 2 + self.locks[i]]
+        color_state = COLOR_SUBGROUP_TO_IDX[tuple(self.colors)]
+        lock_state = 0
+        for i in self.locks:
+            lock_state *= 2
+            lock_state += i
 
-        return (OBJECT_TO_IDX['multidoor'], color_state, state)
+        return (OBJECT_TO_IDX['multidoor'], color_state, state + lock_state * 4)
 
 class Key(WorldObj):
     def __init__(self, color='blue'):

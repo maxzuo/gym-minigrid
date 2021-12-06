@@ -23,10 +23,10 @@ class MultiLockDoorEnv(MiniGridEnv):
         wall = self.room_height + 1
         self.grid.horz_wall(0, wall, width)
 
-        key_colors = self._rand_subset(COLOR_NAMES, 5)
+        key_colors = self._rand_elem(COLOR_SUBGROUP_BY_LEN[3])
 
         # place keys to the multidoor
-        for color in key_colors[:4]:
+        for color in key_colors[:-1]:
             self.place_obj(Key(color), top=(1,1), size=(width-2,width-2))
 
         # place key to regular door
