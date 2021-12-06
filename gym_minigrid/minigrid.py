@@ -307,15 +307,10 @@ class MultiDoor(Door):
         self.locks = [not is_locked for c in colors]
 
     def toggle(self, env, pos):
-        print(self.is_open, self.is_locked)
-        print(*zip(self.colors, self.locks))
         if self.is_locked:
-            print(isinstance(env.carrying, Key), env.carrying.color in self.locks, env.carrying.color)
             if isinstance(env.carrying, Key) and env.carrying.color in self.colors:
                 self.locks[self.colors.index(env.carrying.color)] = True
                 self.is_open = all(self.locks)
-            print(self.is_open, self.is_locked)
-            print(*zip(self.colors, self.locks))
             return self.is_open
 
         self.is_open = not self.is_open
