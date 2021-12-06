@@ -29,7 +29,6 @@ class CascadingLockDoorEnv(MiniGridEnv):
 
             self.grid.set(*self.target_pos, MultiDoor(colors[:i+1][::-1], is_locked=True))
             p = self.place_obj(Key(color), top=(1, (self.room_height + 1) * i + 1), size=(self.room_height, self.room_height))
-            print(y, p)
 
             self.mission = f"Go to the {color} door"
 
