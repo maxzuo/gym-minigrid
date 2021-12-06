@@ -204,6 +204,42 @@ Very straightforward. Sequentially open doors until the last door is opened.
 <img src="/figures/LockedHallway-v0.png" width=200>
 </p>
 
+### MultiLockDoor
+
+Registered configurations:
+- `MiniGrid-MultiLockDoor-v0`
+
+There are two rooms, the goal is to reach the door at the end of room two. Both doors are locked. The first door requires all keys in the room to unlock.
+
+<p align="center">
+<img src="/figures/MultiLockDoor-v0.png" width=200>
+</p>
+
+### CascadingLockDoor
+
+Registered configurations:
+- `MiniGrid-CascadingLockDoor-v0`
+- `MiniGrid-CascadingLockDoor-3-v0`
+- `MiniGrid-CascadingLockDoor-4-v0`
+- `MiniGrid-CascadingLockDoor-5-v0`
+
+The goal is to reach the door at the end of the last room. Doors between rooms are locked. The first door requires the first key, the second door requires the first *and* second key, etc.
+
+<p align="center">
+<img src="/figures/CascadingLockDoor-v0.png" width=200>
+</p>
+
+### DualHallway
+
+Registered configurations:
+- `MiniGrid-DualHallway-v0`
+
+There are two hallways that can reach the goal state/door. Can utilize with heterogeneous demonstrations.
+
+<p align="center">
+<img src="/figures/DualHallway-v0.png" width=200>
+</p>
+
 ## Included Environments
 
 The environments listed below are implemented in the [gym_minigrid/envs](/gym_minigrid/envs) directory.
