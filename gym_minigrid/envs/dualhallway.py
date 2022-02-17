@@ -3,11 +3,12 @@ from gym_minigrid.wrappers import *
 from gym_minigrid.register import register
 
 class DualHallwayEnv(MiniGridEnv):
-    def __init__(self, max_steps=10_000, height=6, hallway_mult=5, see_through_walls=False,distractor_doors=0):
+    def __init__(self, max_steps=10_000, height=6, hallway_mult=5, see_through_walls=False,distractor_doors=0,use_balls=0):
         self.max_steps = max_steps
         self.room_height = height + 1
         self.hallway_mult = hallway_mult
         self.distractor_doors = distractor_doors
+        self.use_balls = use_balls
 
         super().__init__(width=height + 2, height=self.room_height * (self.hallway_mult + 2)+1, max_steps=max_steps, see_through_walls=see_through_walls)
 
@@ -36,7 +37,9 @@ class DualHallwayEnv(MiniGridEnv):
         possible_heights = self._rand_subset(list(range(self.room_height + 1, height - self.room_height, 1)), self.distractor_doors)
         for _,dd_h in enumerate(possible_heights):
             self.grid.set(self._rand_elem((width//2,width//2 - 1)), dd_h, Door(COLOR_NAMES[-(1+_)]))
-            self.place_obj(Ball())
+
+        for i in range(self.use_balls):
+            self.place_obj(HeavyBall())
 
         # place final door
         self.target_pos = self._rand_int(1,width-1), height-1
@@ -76,6 +79,14 @@ class DualHallway_DistractorDoors(DualHallwayEnv):
     def __init__(self, *args, distractor_doors=5, **kwargs):
         super().__init__(*args, distractor_doors=distractor_doors, **kwargs)
 
+class DualHallway_DistractorDoorsBalls(DualHallwayEnv):
+    def __init__(self, *args, distractor_doors=5, use_balls=5, **kwargs):
+        super().__init__(*args, distractor_doors=distractor_doors, use_balls=5, **kwargs)
+
+class DualHallway_Balls(DualHallwayEnv):
+    def __init__(self, *args, use_balls=5, **kwargs):
+        super().__init__(*args, use_balls=use_balls, **kwargs)
+
 register(
     id='MiniGrid-DualHallway-v0',
     entry_point="gym_minigrid.envs:DualHallwayEnv"
@@ -99,4 +110,14 @@ register(
 register(
     id='MiniGrid-DualHallway-DD-v0',
     entry_point="gym_minigrid.envs:DualHallway_DistractorDoors"
+)
+
+register(
+    id='MiniGrid-DualHallway-B-v0',
+    entry_point="gym_minigrid.envs:DualHallway_Balls"
+)
+
+register(
+    id='MiniGrid-DualHallway-DD-B-v0',
+    entry_point="gym_minigrid.envs:DualHallway_DistractorDoorsBalls"
 )

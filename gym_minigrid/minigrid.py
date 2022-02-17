@@ -82,6 +82,7 @@ OBJECT_TO_IDX = {
     'lava'          : 9,
     'agent'         : 10,
     'multidoor'     : 11,
+    'heavyball'     : 12
 }
 
 IDX_TO_OBJECT = dict(zip(OBJECT_TO_IDX.values(), OBJECT_TO_IDX.keys()))
@@ -385,6 +386,16 @@ class Ball(WorldObj):
 
     def render(self, img):
         fill_coords(img, point_in_circle(0.5, 0.5, 0.31), COLORS[self.color])
+
+class HeavyBall(WorldObj):
+    def __init__(self, color='blue'):
+        super(HeavyBall, self).__init__('heavyball', color)
+
+    def can_pickup(self):
+        return False
+
+    def render(self, img):
+        fill_coords(img, point_in_circle(0.5, 0.5, 0.5), COLORS[self.color])
 
 class Box(WorldObj):
     def __init__(self, color, contains=None):
