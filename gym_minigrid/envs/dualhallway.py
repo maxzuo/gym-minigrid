@@ -23,7 +23,7 @@ class DualHallwayEnv(MiniGridEnv):
         # last room
         self.grid.wall_rect(0,self.room_height*(self.hallway_mult+1),width,self.room_height+1)
 
-        *door_colors, final_door = self._rand_subset(COLOR_NAMES[:-self.distractor_doors], 5)
+        *door_colors, final_door = self._rand_subset(COLOR_NAMES[:len(COLOR_NAMES)-self.distractor_doors], 5)
 
         # place doors for hallways
         for j,i in enumerate(range(0,self.hallway_mult+1,self.hallway_mult)):
@@ -36,6 +36,8 @@ class DualHallwayEnv(MiniGridEnv):
         possible_heights = self._rand_subset(list(range(self.room_height + 1, height - self.room_height, 1)), self.distractor_doors)
         for _,dd_h in enumerate(possible_heights):
             self.grid.set(self._rand_elem((width//2,width//2 - 1)), dd_h, Door(COLOR_NAMES[-(1+_)]))
+            self.place_obj(Ball())
+            self.place_obj(Ball())
 
         # place final door
         self.target_pos = self._rand_int(1,width-1), height-1
