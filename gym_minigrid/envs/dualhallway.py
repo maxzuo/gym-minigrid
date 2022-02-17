@@ -37,7 +37,6 @@ class DualHallwayEnv(MiniGridEnv):
         for _,dd_h in enumerate(possible_heights):
             self.grid.set(self._rand_elem((width//2,width//2 - 1)), dd_h, Door(COLOR_NAMES[-(1+_)]))
             self.place_obj(Ball())
-            self.place_obj(Ball())
 
         # place final door
         self.target_pos = self._rand_int(1,width-1), height-1
