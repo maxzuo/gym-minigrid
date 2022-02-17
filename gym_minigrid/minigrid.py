@@ -168,6 +168,8 @@ class WorldObj:
             v = Floor(color)
         elif obj_type == 'ball':
             v = Ball(color)
+        elif obj_type == 'heavyball':
+            v = HeavyBall(color)
         elif obj_type == 'key':
             v = Key(color)
         elif obj_type == 'box':
